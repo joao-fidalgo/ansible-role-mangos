@@ -1,0 +1,22 @@
+---
+# file: tasks/upgrade_cmake
+- shell: cmake --version | head -n1 | cut -d " " -f3
+  register: cmake_version
+  ignore_errors: yes
+
+- get_url:
+    url: https://github.com/Kitware/CMake/archive/v3.10.2.tar.gz
+    dest: /tmp/cmake-3.10.2.tar.gz
+    checksum: sha256:9ae3aa6185871479b45a3085ad62455cddaa089ff67f4220d7a5d3b2ca6e6072
+  when: cmake_version is undefined or cmake_version.stdout != "3.10.2"
+
+- unarchive:
+    src: /tmp/cmake-3.10.2.tar.gz
+    dest: /tmp
+    remote_src: yes
+  when: cmake_version is undefined or cmake_version.stdout != "3.10.2"
+
+- shell: ./bootstrap; make; make install
+  args:
+    chdir: /tmp/CMake-3.10.2
+  when: cmake_version is undefined or cmake_version.stdout != "3.10.2"

@@ -1,0 +1,33 @@
+---
+# file: tasks/install_build_dependencies
+- apt_repository: repo="{{ item }}"
+  with_items:
+    - ppa:kubuntu-ppa/backports
+    - ppa:ubuntu-toolchain-r/test
+  register: apt_repositories
+  when: ansible_os_family == "Debian"
+
+- apt: update_cache=yes
+  when: ansible_os_family == "Debian" and apt_repositories.changed
+
+- package: name="{{ item }}" state=latest
+  with_items:
+    - build-essential
+    - gcc-4.8
+    - g++-4.8
+    - automake
+    - git-core
+    - autoconf
+    - make
+    - patch
+    - libmysql++-dev
+    - libtool
+    - libssl-dev
+    - grep
+    - binutils
+    - zlibc
+    - libc6
+    - libbz2-dev
+    - cmake
+    - libboost-all-dev
+  when: ansible_os_family == "Debian"

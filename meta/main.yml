@@ -1,0 +1,14 @@
+---
+# file: meta/main
+galaxy_info:
+  author: joao-fidalgo
+  description: MaNGOS for Debian/Ubuntu
+  license: license (GPLv2)
+  min_ansible_version: 2.2
+  galaxy_tags:
+    - mangos
+dependencies:
+  - src: geerlingguy.mysql
+    version: 2.9.2
+    when: install_mysql == true
+    become: yes

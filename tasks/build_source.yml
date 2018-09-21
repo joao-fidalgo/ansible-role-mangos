@@ -1,0 +1,22 @@
+---
+# file: tasks/build_source
+- file:
+    path: "{{ mangos_directory }}/build"
+    state: directory
+
+- file:
+    path: /opt/mangos
+    state: directory
+    owner: "{{ ansible_user }}"
+
+- become: no
+  command: "{{ item }}"
+  args:
+    chdir: "{{ mangos_directory }}/build"
+  environment:
+    CC: 'gcc-4.8'
+    CXX: 'g++-4.8'
+  with_items:
+    - cmake ../ -DBUILD_EXTRACTORS=ON -DBUILD_PLAYERBOT=ON -DDEBUG=0 -DPCH=1
+    - make -j4
+    - make install

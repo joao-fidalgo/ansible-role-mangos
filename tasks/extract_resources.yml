@@ -1,0 +1,33 @@
+---
+# file: tasks/extract_resources.yml
+- become: no
+  command: "cp -r /opt/mangos/bin/tools/* ."
+  args:
+    chdir: "{{ wow_directory }}"
+
+- become: no
+  command: "cp -r {{ mangos_directory }}/contrib/extractor_scripts/* ."
+  args:
+    chdir: "{{ wow_directory }}"
+
+- become: no
+  file:
+    dest: ExtractResources.sh
+    mode: a+x
+  args:
+    chdir: "{{ wow_directory }}"
+
+- become: no
+  command: echo -e "4" | ./ExtractResources.sh
+  args:
+    chdir: "{{ wow_directory }}"
+
+- become: no
+  command: "cp -r {{ wow_directory }}/{{ item }} ."
+  args:
+    chdir: /opt/mangos
+  with_items:
+    - dbc
+    - maps
+    - mmaps
+    - vmaps
