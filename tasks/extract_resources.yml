@@ -1,5 +1,16 @@
 ---
 # file: tasks/extract_resources.yml
+- package:
+    name: python-pip
+    state: present
+
+- pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - pip
+    - pexpect
+
 - become: no
   find:
     path: "{{ mangos_directory }}/run/bin/tools"
@@ -37,13 +48,16 @@
     dest: "{{ wow_directory }}/ExtractResources.sh"
     mode: a+x
 
-- become: no
-  command: "echo -e 4 | ./ExtractResources.sh a"
-  args:
-    chdir: "{{ wow_directory }}"
+#- become: no
+#  expect:
+#    command: "./ExtractResources.sh a"
+#    responses:
+#      "How many CPUs should be used for extracting mmaps?.*": 4
+#  args:
+#    chdir: "{{ wow_directory }}"
 
 - become: no
-  command: "cp -r {{ wow_directory }}/{{ item }} ."
+  command: "cp -r {{ wow_directory | regex_replace(' ', '\\ ') }}/{{ item }} ."
   args:
     chdir: "{{ mangos_directory }}/run"
   with_items:
