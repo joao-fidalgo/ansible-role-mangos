@@ -1,13 +1,9 @@
 ---
 # file: tasks/build_source
-- file:
+- become: no
+  file:
     path: "{{ mangos_directory }}/build"
     state: directory
-
-- file:
-    path: /opt/mangos
-    state: directory
-    owner: "{{ ansible_user }}"
 
 - become: no
   command: "{{ item }}"
