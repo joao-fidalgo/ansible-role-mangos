@@ -1,14 +1,36 @@
 ---
 # file: tasks/extract_resources.yml
 - become: no
-  command: "cp -r {{ mangos_directory }}/run/bin/tools/* ."
-  args:
-    chdir: "{{ wow_directory }}"
+  find:
+    path: "{{ mangos_directory }}/run/bin/tools"
+    recurse: yes
+    file_type: file
+  register: find_result
 
 - become: no
-  command: "cp -r {{ mangos_directory }}/contrib/extractor_scripts/* ."
-  args:
-    chdir: "{{ wow_directory }}"
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ wow_directory }}"
+    mode: "{{ item.mode }}"
+    remote_src: yes
+  with_items:
+    - "{{ find_result.files }}"
+
+- become: no
+  find:
+    path: "{{ mangos_directory }}/contrib/extractor_scripts"
+    recurse: yes
+    file_type: file
+  register: find_result
+
+- become: no
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ wow_directory }}"
+    mode: "{{ item.mode }}"
+    remote_src: yes
+  with_items:
+    - "{{ find_result.files }}"
 
 - become: no
   file:
