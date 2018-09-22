@@ -13,6 +13,6 @@
     CC: 'gcc-4.8'
     CXX: 'g++-4.8'
   with_items:
-    - cmake ../ -DBUILD_EXTRACTORS=ON -DBUILD_PLAYERBOT=ON -DDEBUG=0 -DPCH=1
+    - cmake ../ -DCMAKE_INSTALL_PREFIX=\../run -DBUILD_EXTRACTORS=ON -DBUILD_PLAYERBOT=ON -DDEBUG=0 -DPCH=1
     - make -j4
     - make install

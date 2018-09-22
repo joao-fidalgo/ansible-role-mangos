@@ -1,7 +1,7 @@
 ---
 # file: tasks/extract_resources.yml
 - become: no
-  command: "cp -r /opt/mangos/bin/tools/* ."
+  command: "cp -r {{ mangos_directory }}/run/bin/tools/* ."
   args:
     chdir: "{{ wow_directory }}"
 
@@ -25,7 +25,7 @@
 - become: no
   command: "cp -r {{ wow_directory }}/{{ item }} ."
   args:
-    chdir: /opt/mangos
+    chdir: "{{ mangos_directory }}/run"
   with_items:
     - dbc
     - maps
