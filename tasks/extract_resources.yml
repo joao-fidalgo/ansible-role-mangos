@@ -38,7 +38,7 @@
     mode: a+x
 
 - become: no
-  command: echo -e "4" | ./ExtractResources.sh
+  command: echo -e "4" | ./ExtractResources.sh a
   args:
     chdir: "{{ wow_directory }}"
 
