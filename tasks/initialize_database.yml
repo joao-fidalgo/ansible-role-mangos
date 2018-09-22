@@ -5,7 +5,7 @@
     state: import
     target: "{{ mangos_directory }}/sql/create/db_drop_mysql.sql"
     single_transaction: yes
-  ignore_errors: true
+  ignore_errors: yes
 
 - mysql_db:
     name: all
@@ -44,16 +44,17 @@
     path: "{{ db_directory }}/InstallFullDB.config"
   register: stat_result
 
-- command: ./InstallFullDB.sh
+- become: no
+  command: ./InstallFullDB.sh
   args:
     chdir: "{{ db_directory }}"
-  become: no
+  ignore_errors: yes
   when: stat_result is not defined or stat_result.stat.exists == false
 
-- command: ./InstallFullDB.sh
+- become: no
+  command: ./InstallFullDB.sh
   args:
     chdir: "{{ db_directory }}"
-  become: no
 
 - mysql_db:
     name: "{{ mangos_database_name }}"
