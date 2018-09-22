@@ -34,10 +34,8 @@
 
 - become: no
   file:
-    dest: ExtractResources.sh
+    dest: "{{ wow_directory }}/ExtractResources.sh"
     mode: a+x
-  args:
-    chdir: "{{ wow_directory }}"
 
 - become: no
   command: echo -e "4" | ./ExtractResources.sh
